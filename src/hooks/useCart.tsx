@@ -70,8 +70,13 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   };
 
   const removeProduct = (productId: number) => {
-    
     try {
+      const product = cart.find(product => product.id === productId)
+  
+      if(!product) {
+        throw Error
+      }
+
       setCart(cart => {
         const cartFiltered = cart.filter(product => product.id !== productId)
         
@@ -107,7 +112,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       tempCart[productIndex].amount = amount
 
       setCart([...tempCart])
-      
+
       localStorage.setItem('@RocketShoes:cart', JSON.stringify(tempCart))
     } catch (err) {
       console.log(err)
