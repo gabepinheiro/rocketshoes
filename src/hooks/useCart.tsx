@@ -46,11 +46,12 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         const amountProductInCart = tempCart[productExistsId].amount
 
         if (amountProductInCart > amountInStock) {
-          return alert('Quantidade solicitada fora de estoque')
+          toast.error('Quantidade solicitada fora de estoque');
+          return
         }
 
       } catch (error) {
-        console.log(error)
+        toast.error('Quantidade solicitada fora de estoque');
       }
 
       return setCart([...tempCart])
@@ -59,9 +60,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     try {
       const { data } = await api.get(`/products/${productId}`)
       
-      setCart(cart => cart.concat({...data, amount: 1 }))
+      setCart(cart => cart.concat({ ...data, amount: 1 }))
     } catch {
-      // TODO
+      toast.error('Erro na adição do produto');
     }
   };
 
