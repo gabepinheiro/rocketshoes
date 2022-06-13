@@ -39,6 +39,20 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       const tempCart = [...cart]
       tempCart[productExistsId].amount++
 
+      try {
+        const { data } = await api.get<Stock>(`/stock/${productId}`)
+        const { amount: amountInStock  } = data
+
+        const amountProductInCart = tempCart[productExistsId].amount
+
+        if (amountProductInCart > amountInStock) {
+          return alert('Quantidade solicitada fora de estoque')
+        }
+
+      } catch (error) {
+        console.log(error)
+      }
+
       return setCart([...tempCart])
     }
 
