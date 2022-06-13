@@ -33,6 +33,15 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   });
 
   const addProduct = async (productId: number) => {
+    const productExistsId = cart.findIndex(product => product.id === productId)
+
+    if(productExistsId !== -1) {
+      const tempCart = [...cart]
+      tempCart[productExistsId].amount++
+
+      return setCart([...tempCart])
+    }
+
     try {
       const { data } = await api.get(`/products/${productId}`)
       
