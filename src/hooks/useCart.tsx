@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../services/api';
 import { Product, Stock } from '../types';
@@ -22,15 +22,15 @@ interface CartContextData {
 const CartContext = createContext<CartContextData>({} as CartContextData);
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
-  const [cart, setCart] = useState<Product[]>(() => {
-    // const storagedCart = Buscar dados do localStorage
+  const [cart, setCart] = useState<Product[]>([]);
 
-    // if (storagedCart) {
-    //   return JSON.parse(storagedCart);
-    // }
+  useEffect(() => {
+    const storagedCart = localStorage.getItem('@RocketShoes:cart')
 
-    return [];
-  });
+    if (storagedCart) {
+      setCart(JSON.parse(storagedCart))
+    }
+  }, [])
 
   const addProduct = async (productId: number) => {
     const productExistsId = cart.findIndex(product => product.id === productId)
